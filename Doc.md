@@ -9,6 +9,9 @@ This is an app for tracking our riding history
 4. Run `npm start`
 5. Hit the server to test health `curl localhost:8010/health` and expect a `200` response 
 
+## Doc
+
+Link to the [Documentation](Doc.md)
 ## Stacks
 
 - Http Server: Express
