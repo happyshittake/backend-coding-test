@@ -22,35 +22,35 @@ module.exports = (db) => {
             return res.send({
                 error_code: 'VALIDATION_ERROR',
                 message: 'Start latitude and longitude must be between -90 - 90 and -180 to 180 degrees respectively'
-            }).status(422);
+            });
         }
 
         if (endLatitude < -90 || endLatitude > 90 || endLongitude < -180 || endLongitude > 180) {
             return res.send({
                 error_code: 'VALIDATION_ERROR',
                 message: 'End latitude and longitude must be between -90 - 90 and -180 to 180 degrees respectively'
-            }).status(422);
+            });
         }
 
         if (typeof riderName !== 'string' || riderName.length < 1) {
             return res.send({
                 error_code: 'VALIDATION_ERROR',
                 message: 'Rider name must be a non empty string'
-            }).status(422);
+            });
         }
 
         if (typeof driverName !== 'string' || driverName.length < 1) {
             return res.send({
                 error_code: 'VALIDATION_ERROR',
                 message: 'Rider name must be a non empty string'
-            }).status(422);
+            });
         }
 
         if (typeof driverVehicle !== 'string' || driverVehicle.length < 1) {
             return res.send({
                 error_code: 'VALIDATION_ERROR',
                 message: 'Rider name must be a non empty string'
-            }).status(422);
+            });
         }
 
         var values = [req.body.start_lat, req.body.start_long, req.body.end_lat, req.body.end_long, req.body.rider_name, req.body.driver_name, req.body.driver_vehicle];
@@ -60,7 +60,7 @@ module.exports = (db) => {
                 return res.send({
                     error_code: 'SERVER_ERROR',
                     message: 'Unknown error'
-                }).status(500);
+                });
             }
 
             db.all('SELECT * FROM Rides WHERE rideID = ?', this.lastID, function (err, rows) {
@@ -68,7 +68,7 @@ module.exports = (db) => {
                     return res.send({
                         error_code: 'SERVER_ERROR',
                         message: 'Unknown error'
-                    }).status(500);
+                    });
                 }
 
                 res.send(rows);
@@ -82,14 +82,14 @@ module.exports = (db) => {
                 return res.send({
                     error_code: 'SERVER_ERROR',
                     message: 'Unknown error'
-                }).status(500);
+                });
             }
 
             if (rows.length === 0) {
                 return res.send({
                     error_code: 'RIDES_NOT_FOUND_ERROR',
                     message: 'Could not find any rides'
-                }).status(404);
+                });
             }
 
             res.send(rows);
@@ -102,14 +102,14 @@ module.exports = (db) => {
                 return res.send({
                     error_code: 'SERVER_ERROR',
                     message: 'Unknown error'
-                }).status(500);
+                });
             }
 
             if (rows.length === 0) {
                 return res.send({
                     error_code: 'RIDES_NOT_FOUND_ERROR',
                     message: 'Could not find any rides'
-                }).status(404);
+                });
             }
 
             res.send(rows);
