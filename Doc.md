@@ -31,7 +31,7 @@ The app will response with http status code `200`. If there are any errors the s
 - SERVER_ERROR: There's internal server app
 
 ## Online OpenApi Doc
-For more indepth api documentation, I suggest you read the swagger ui doc.
+For more indepth api documentation, I suggest you read the openapi doc.
 
 For running the openapi doc:
 - Setup the app like the instruction above
