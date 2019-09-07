@@ -1,0 +1,312 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "description": "This is an application server to store your riding history",
+        "version": "1.0.0",
+        "title": "The Ride App"
+    },
+    "host": "localhost:8010",
+    "basePath": "/",
+    "schemes": [
+        "http"
+    ],
+    "components": {
+        "schemas": {
+            "Ride": {
+                "type": "object",
+                "properties": {
+                    "rideId": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "startLat": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "endLat": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "startLong": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "endLong": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "riderName": {
+                        "type": "string"
+                    },
+                    "driverName": {
+                        "type": "string"
+                    },
+                    "driverVehicle": {
+                        "type": "string"
+                    },
+                    "created": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                }
+            },
+            "ErrorResponse": {
+                "type": "object",
+                "properties": {
+                    "error_code": {
+                        "type": "string",
+                        "description": "the code of the error",
+                        "enum": [
+                            "VALIDATION_ERROR",
+                            "SERVER_ERROR",
+                            "RIDES_NOT_FOUND_ERROR"
+                        ]
+                    },
+                    "message": {
+                        "type": "string",
+                        "description": "description of the error"
+                    }
+                }
+            },
+            "CreateRideRequest": {
+                "type": "object",
+                "required": [
+                    "start_lat",
+                    "end_lat",
+                    "start_long",
+                    "end_long",
+                    "rider_name",
+                    "driver_name",
+                    "driver_vehicle"
+                ],
+                "properties": {
+                    "start_lat": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "end_lat": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "start_long": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "end_long": {
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "rider_name": {
+                        "type": "string"
+                    },
+                    "driver_name": {
+                        "type": "string"
+                    },
+                    "driver_vehicle": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    },
+    "paths": {
+        "/health": {
+            "get": {
+                "summary": "health check",
+                "responses": {
+                    "200": {
+                        "content": {
+                            "text/html": {
+                                "schema": {
+                                    "type": "string",
+                                    "example": "Healthy"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/rides": {
+            "get": {
+                "summary": "get rides",
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "oneOf": [
+                                        {
+                                            "schema": {
+                                                "type": "array",
+                                                "items": {
+                                                    "$ref": "#/components/schemas/Ride"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/ErrorResponse"
+                                        }
+                                    ]
+                                },
+                                "examples": {
+                                    "Success": {
+                                        "value": [
+                                            {
+                                                "rideID": 1,
+                                                "startLat": 90,
+                                                "startLong": 90,
+                                                "endLat": 90,
+                                                "endLong": 90,
+                                                "riderName": "aaaa",
+                                                "driverName": "aaaa",
+                                                "driverVehicle": "bbbb",
+                                                "created": "2019-09-07 17:43:01"
+                                            }
+                                        ]
+                                    },
+                                    "Error": {
+                                        "value":{
+                                            "error_code": "RIDES_NOT_FOUND_ERROR",
+                                            "message": "Could not find any rides"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "create new ride",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CreateRideRequest"
+                            },
+                            "example": {
+                                "start_lat": 90,
+                                "end_lat": 90,
+                                "start_long": 90,
+                                "end_long": 90,
+                                "rider_name": "aaaa",
+                                "driver_name": "aaaa",
+                                "driver_vehicle": "bbbb"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "oneOf": [
+                                        {
+                                            "schema": {
+                                                "type": "array",
+                                                "items": {
+                                                    "$ref": "#/components/schemas/Ride"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/ErrorResponse"
+                                        }
+                                    ]
+                                },
+                                "examples": {
+                                    "Success": {
+                                        "value": [
+                                            {
+                                                "rideID": 1,
+                                                "startLat": 90,
+                                                "startLong": 90,
+                                                "endLat": 90,
+                                                "endLong": 90,
+                                                "riderName": "aaaa",
+                                                "driverName": "aaaa",
+                                                "driverVehicle": "bbbb",
+                                                "created": "2019-09-07 17:43:01"
+                                            }
+                                        ]
+                                    },
+                                    "Error": {
+                                        "value":{
+                                            "error_code": "RIDES_NOT_FOUND_ERROR",
+                                            "message": "Could not find any rides"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/rides/{rideId}": {
+            "get": {
+                "summary": "get ride by rideId",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "rideId",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "required": true,
+                        "description": "the id of the ride"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "oneOf": [
+                                        {
+                                            "schema": {
+                                                "type": "array",
+                                                "items": {
+                                                    "$ref": "#/components/schemas/Ride"
+                                                }
+                                            }
+                                        },
+                                        {
+                                            "$ref": "#/components/schemas/ErrorResponse"
+                                        }
+                                    ]
+                                },
+                                "examples": {
+                                    "Success": {
+                                        "value": [
+                                            {
+                                                "rideID": 1,
+                                                "startLat": 90,
+                                                "startLong": 90,
+                                                "endLat": 90,
+                                                "endLong": 90,
+                                                "riderName": "aaaa",
+                                                "driverName": "aaaa",
+                                                "driverVehicle": "bbbb",
+                                                "created": "2019-09-07 17:43:01"
+                                            }
+                                        ]
+                                    },
+                                    "Error": {
+                                        "value":{
+                                            "error_code": "RIDES_NOT_FOUND_ERROR",
+                                            "message": "Could not find any rides"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
