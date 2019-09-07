@@ -22,7 +22,11 @@
     "swagger-ui-express": "^4.0.7"
   },
   "devDependencies": {
+    "eslint": "^6.3.0",
+    "eslint-config-prettier": "^6.2.0",
+    "eslint-plugin-prettier": "^3.1.0",
     "mocha": "^6.1.4",
+    "prettier": "1.18.2",
     "supertest": "^4.0.2"
   }
 }
