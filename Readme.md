@@ -2,6 +2,10 @@
 
 The goal of these exercises are to assess your proficiency in software engineering that is related to the daily work that we do at Xendit. Please follow the instructions below to complete the assessment.
 
+## Doc
+
+Link to the [Documentation](Doc.md)
+
 ## Setup
 
 1. Fork this repository to your own github profile
@@ -15,12 +19,21 @@ The goal of these exercises are to assess your proficiency in software engineeri
 
 Below will be your set of tasks to accomplish. Please work on each of these tasks in order. Success criteria will be defined clearly for each task
 
-1. [Documentation](#documentation)
-2. [Implement Tooling](#implement-tooling)
-3. [Implement Pagination](#implement-pagination)
-4. [Refactoring](#refactoring)
-5. [Security](#security)
-6. [Load Testing](#load-testing)
+- [Xendit Coding Exercise](#xendit-coding-exercise)
+  - [Doc](#doc)
+  - [Setup](#setup)
+  - [Tasks](#tasks)
+    - [Documentation](#documentation)
+      - [Success Criteria](#success-criteria)
+    - [Implement Tooling](#implement-tooling)
+      - [Success Criteria](#success-criteria-1)
+    - [Implement Pagination](#implement-pagination)
+    - [Refactoring](#refactoring)
+      - [Success Criteria](#success-criteria-2)
+    - [Security](#security)
+      - [Success Criteria](#success-criteria-3)
+    - [Load Testing](#load-testing)
+      - [Success Criteria](#success-criteria-4)
 
 ### Documentation
 
