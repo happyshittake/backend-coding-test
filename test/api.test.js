@@ -13,8 +13,8 @@ const mockdb = {
 const logger = {
   error: function(a) {}
 };
+const error = require("../src/error");
 
-const repo = require("../src/repo");
 describe("api tests", function() {
   describe("Get /health", function() {
     let app;
@@ -175,7 +175,7 @@ describe("api tests", function() {
           .expect("Content-Type", /json/)
           .expect(200, {
             error_code: "VALIDATION_ERROR",
-            message: "Rider name must be a non empty string"
+            message: "Driver name must be a non empty string"
           })
           .then(res => mockLogger.expects("error").once());
       });
@@ -221,10 +221,11 @@ describe("api tests", function() {
       let mockLogger;
       beforeEach(done => {
         sinon.stub(mockdb, "run").callsFake(function(a, b, cb) {
-          cb(true);
+          cb("error");
 
           return this;
         });
+
         mockLogger = sinon.mock(logger);
         mockApp = appFactory(mockdb, mockLogger);
         done();
