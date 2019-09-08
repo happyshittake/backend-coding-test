@@ -7,6 +7,7 @@ const swaggerDocument = require("../swagger.json");
 
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
+const repo = require("./repo");
 
 module.exports = (db, logger) => {
   app.use("/api-docs", swaggerUi.serve);
@@ -120,17 +121,15 @@ module.exports = (db, logger) => {
     );
   });
 
-  app.get("/rides", (req, res) => {
-    db.all("SELECT * FROM Rides", function(err, rows) {
-      if (err) {
-        logger.error(err);
-        return res.send({
-          error_code: "SERVER_ERROR",
-          message: "Unknown error"
-        });
-      }
+  app.get("/rides", async (req, res) => {
+    const page = Number(req.query.page) ? Number(req.query.page) : 1;
+    const perpage = Number(req.query.perpage) ? Number(req.query.perpage) : 30;
+    console.log(page, perpage);
+    try {
+      const offset = (page - 1) * perpage;
 
-      if (rows.length === 0) {
+      const rides = await repo.getRides(db, offset, perpage);
+      if (rides.length === 0) {
         const errObject = {
           error_code: "RIDES_NOT_FOUND_ERROR",
           message: "Could not find any rides"
@@ -139,8 +138,19 @@ module.exports = (db, logger) => {
         return res.send(errObject);
       }
 
-      res.send(rows);
-    });
+      const counts = await repo.countRides(db);
+
+      res.send({
+        total: counts,
+        data: rides
+      });
+    } catch (err) {
+      logger.error(err);
+      res.send({
+        error_code: "SERVER_ERROR",
+        message: "Unknown error"
+      });
+    }
   });
 
   app.get("/rides/:id", (req, res) => {
