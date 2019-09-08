@@ -1,3 +1,5 @@
+const error = require("../error");
+
 module.exports = (db, offset, limit) =>
   new Promise((resolve, reject) => {
     db.all(
@@ -5,7 +7,7 @@ module.exports = (db, offset, limit) =>
       [limit, offset],
       (err, rows) => {
         if (err) {
-          reject(err);
+          reject(new error.ServerError(err));
           return;
         }
 
