@@ -8,6 +8,7 @@ const swaggerDocument = require("../swagger.json");
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();
 const repo = require("./repo");
+const error = require("./error");
 const validation = require("./validation");
 
 module.exports = (db, logger) => {
@@ -36,12 +37,7 @@ module.exports = (db, logger) => {
 
       const rides = await repo.getRides(db, offset, perpage);
       if (rides.length === 0) {
-        const errObject = {
-          error_code: "RIDES_NOT_FOUND_ERROR",
-          message: "Could not find any rides"
-        };
-        logger.error(errObject);
-        return res.send(errObject);
+        throw new error.ErrRidesNotFound("Could not find any rides");
       }
 
       const counts = await repo.countRides(db);
@@ -52,10 +48,7 @@ module.exports = (db, logger) => {
       });
     } catch (err) {
       logger.error(err);
-      res.send({
-        error_code: "SERVER_ERROR",
-        message: "Unknown error"
-      });
+      res.send(err.jsonFormat);
     }
   });
 

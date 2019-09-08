@@ -370,8 +370,8 @@ describe("api tests", function() {
       let app;
       let mockLogger;
       beforeEach(done => {
-        sinon.stub(mockdb, "all").callsFake((a, cb) => {
-          cb(true);
+        sinon.stub(mockdb, "all").callsFake((a, b, cb) => {
+          cb("error");
         });
         mockLogger = sinon.mock(logger);
         app = appFactory(mockdb, mockLogger);
