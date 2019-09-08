@@ -7,7 +7,7 @@ module.exports = (db, offset, limit) =>
       [limit, offset],
       (err, rows) => {
         if (err) {
-          reject(new error.ServerError(err));
+          reject(new error.ErrServer(err));
           return;
         }
 

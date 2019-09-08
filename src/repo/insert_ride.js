@@ -15,7 +15,7 @@ module.exports = (db, body) =>
       ],
       function(err) {
         if (err) {
-          reject(new error.ServerError(err));
+          reject(new error.ErrServer(err));
           return;
         }
 
