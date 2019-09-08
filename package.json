@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha tests",
+    "test": "nyc mocha --recursive",
     "start": "node index.js"
   },
   "keywords": [
@@ -19,10 +19,21 @@
     "body-parser": "^1.19.0",
     "express": "^4.16.4",
     "sqlite3": "^4.0.6",
-    "swagger-ui-express": "^4.0.7"
+    "swagger-ui-express": "^4.0.7",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
+    "eslint": "^6.3.0",
+    "eslint-config-prettier": "^6.2.0",
+    "eslint-plugin-prettier": "^3.1.0",
     "mocha": "^6.1.4",
+    "nyc": "^14.1.1",
+    "pre-push": "^0.1.1",
+    "prettier": "1.18.2",
+    "sinon": "^7.4.2",
     "supertest": "^4.0.2"
-  }
+  },
+  "pre-push":[
+    "test"
+  ]
 }
