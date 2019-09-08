@@ -6,11 +6,15 @@ const assert = require("assert");
 const sinon = require("sinon");
 const mockdb = {
   run: function(a, b, cb) {},
-  all: function(a, b, cb) {}
+  all: function(a, b, cb) {},
+  each: function(a, b, cb) {},
+  get: function() {}
 };
 const logger = {
   error: function(a) {}
 };
+
+const repo = require("../src/repo");
 describe("api tests", function() {
   describe("Get /health", function() {
     let app;
@@ -394,7 +398,7 @@ describe("api tests", function() {
       let app;
       let mockLogger;
       beforeEach(done => {
-        sinon.stub(mockdb, "all").callsFake((a, cb) => {
+        sinon.stub(mockdb, "all").callsFake((a, b, cb) => {
           cb(false, []);
         });
         mockLogger = sinon.mock(logger);
@@ -423,7 +427,7 @@ describe("api tests", function() {
       let app;
 
       beforeEach(done => {
-        sinon.stub(mockdb, "all").callsFake((a, cb) => {
+        sinon.stub(mockdb, "all").callsFake((a, b, cb) => {
           cb(
             false,
             JSON.parse(`
@@ -445,6 +449,9 @@ describe("api tests", function() {
 
           return this;
         });
+        sinon.stub(mockdb, "get").callsFake((a, cb) => {
+          cb(false, { count: 1 });
+        });
         app = appFactory(mockdb);
         done();
       });
@@ -454,14 +461,72 @@ describe("api tests", function() {
         done();
       });
 
-      it("should return all rides", () => {
+      it("should return paginated format rides", () => {
         return request(app)
           .get("/rides")
           .expect("Content-Type", /json/)
           .expect(200)
           .then(res => {
-            assert(res.body.length, 1);
-            assert(res.body[0].rideID, 1);
+            assert(res.body.total, 1);
+            assert(res.body.data.length, 1);
+          });
+      });
+    });
+
+    describe("when page and perpage is set, should query with appropriate offset and limit", () => {
+      let app;
+
+      beforeEach(done => {
+        sinon
+          .stub(mockdb, "all")
+          .withArgs(
+            sinon.match.string,
+            sinon.match.array.deepEquals([10, 10]),
+            sinon.match.func
+          )
+          .callsFake((a, b, cb) => {
+            cb(
+              false,
+              JSON.parse(`
+          [
+              {
+                  "rideID": 1,
+                  "startLat": 90,
+                  "startLong": 90,
+                  "endLat": 90,
+                  "endLong": 90,
+                  "riderName": "asda",
+                  "driverName": "aaaa",
+                  "driverVehicle": "asdasd",
+                  "created": "2019-09-07 17:43:01"
+              }
+          ]
+          `)
+            );
+
+            return this;
+          });
+        sinon.stub(mockdb, "get").callsFake((a, cb) => {
+          cb(false, { count: 1 });
+        });
+        app = appFactory(mockdb);
+        done();
+      });
+
+      afterEach(done => {
+        sinon.restore();
+        done();
+      });
+
+      it("should return paginated format rides", () => {
+        return request(app)
+          .get("/rides")
+          .query({ page: 2, perpage: 10 })
+          .expect("Content-Type", /json/)
+          .expect(200)
+          .then(res => {
+            assert(res.body.total, 1);
+            assert(res.body.data.length, 1);
           });
       });
     });

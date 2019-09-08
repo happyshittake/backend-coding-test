@@ -130,6 +130,24 @@
         "/rides": {
             "get": {
                 "summary": "get rides",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "page",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "the page of the pagination"
+                    },
+                    {
+                        "in": "query",
+                        "name": "perpage",
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "the limit of items per page"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "content": {
@@ -138,9 +156,18 @@
                                     "oneOf": [
                                         {
                                             "schema": {
-                                                "type": "array",
-                                                "items": {
-                                                    "$ref": "#/components/schemas/Ride"
+                                                "type": "object",
+                                                "properties": {
+                                                    "total": {
+                                                        "type": "integer",
+                                                        "description": "total items in database"
+                                                    },
+                                                    "data": {
+                                                        "type": "array",
+                                                        "items": {
+                                                            "$ref": "#/components/schemas/Ride"
+                                                        }
+                                                    }
                                                 }
                                             }
                                         },
@@ -153,20 +180,25 @@
                                     "Success": {
                                         "value": [
                                             {
-                                                "rideID": 1,
-                                                "startLat": 90,
-                                                "startLong": 90,
-                                                "endLat": 90,
-                                                "endLong": 90,
-                                                "riderName": "aaaa",
-                                                "driverName": "aaaa",
-                                                "driverVehicle": "bbbb",
-                                                "created": "2019-09-07 17:43:01"
+                                                "total": 1,
+                                                "data": [
+                                                    {
+                                                        "rideID": 1,
+                                                        "startLat": 90,
+                                                        "startLong": 90,
+                                                        "endLat": 90,
+                                                        "endLong": 90,
+                                                        "riderName": "aaaa",
+                                                        "driverName": "aaaa",
+                                                        "driverVehicle": "bbbb",
+                                                        "created": "2019-09-07 17:43:01"
+                                                    }
+                                                ]
                                             }
                                         ]
                                     },
                                     "Error": {
-                                        "value":{
+                                        "value": {
                                             "error_code": "RIDES_NOT_FOUND_ERROR",
                                             "message": "Could not find any rides"
                                         }
@@ -234,7 +266,7 @@
                                         ]
                                     },
                                     "Error": {
-                                        "value":{
+                                        "value": {
                                             "error_code": "RIDES_NOT_FOUND_ERROR",
                                             "message": "Could not find any rides"
                                         }
@@ -296,7 +328,7 @@
                                         ]
                                     },
                                     "Error": {
-                                        "value":{
+                                        "value": {
                                             "error_code": "RIDES_NOT_FOUND_ERROR",
                                             "message": "Could not find any rides"
                                         }
