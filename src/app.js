@@ -124,7 +124,6 @@ module.exports = (db, logger) => {
   app.get("/rides", async (req, res) => {
     const page = Number(req.query.page) ? Number(req.query.page) : 1;
     const perpage = Number(req.query.perpage) ? Number(req.query.perpage) : 30;
-    console.log(page, perpage);
     try {
       const offset = (page - 1) * perpage;
 
