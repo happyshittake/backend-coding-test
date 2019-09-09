@@ -13,7 +13,9 @@ const mockdb = {
 const logger = {
   error: function(a) {}
 };
-const error = require("../src/error");
+
+let realDB;
+let targetApp;
 
 describe("api tests", function() {
   describe("Get /health", function() {
