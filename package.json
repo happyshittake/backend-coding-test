@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "nyc mocha",
-    "start": "node index.js"
+    "start": "node index.js",
+    "test:load": "node load-test.js"
   },
   "keywords": [
     "Xendit"
@@ -23,9 +24,11 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
+    "artillery": "^1.6.0-28",
     "eslint": "^6.3.0",
     "eslint-config-prettier": "^6.2.0",
     "eslint-plugin-prettier": "^3.1.0",
+    "forever-monitor": "^1.7.1",
     "mocha": "^6.1.4",
     "nyc": "^14.1.1",
     "pre-push": "^0.1.1",
@@ -33,7 +36,7 @@
     "sinon": "^7.4.2",
     "supertest": "^4.0.2"
   },
-  "pre-push":[
+  "pre-push": [
     "test"
   ]
 }
