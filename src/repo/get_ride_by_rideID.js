@@ -1,13 +1,13 @@
 const error = require("../error");
 
-module.exports = db =>
+module.exports = (db, rideID) =>
   new Promise((resolve, reject) => {
-    db.get("SELECT count(rideID) as count FROM Rides", (err, row) => {
+    db.all("SELECT * FROM Rides WHERE rideID = ?", rideID, (err, rows) => {
       if (err) {
         reject(new error.ErrServer(err));
         return;
       }
 
-      resolve(row.count);
+      resolve(rows);
     });
   });

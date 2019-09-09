@@ -13,8 +13,8 @@ const mockdb = {
 const logger = {
   error: function(a) {}
 };
+const error = require("../src/error");
 
-const repo = require("../src/repo");
 describe("api tests", function() {
   describe("Get /health", function() {
     let app;
@@ -175,7 +175,7 @@ describe("api tests", function() {
           .expect("Content-Type", /json/)
           .expect(200, {
             error_code: "VALIDATION_ERROR",
-            message: "Rider name must be a non empty string"
+            message: "Driver name must be a non empty string"
           })
           .then(res => mockLogger.expects("error").once());
       });
@@ -221,10 +221,11 @@ describe("api tests", function() {
       let mockLogger;
       beforeEach(done => {
         sinon.stub(mockdb, "run").callsFake(function(a, b, cb) {
-          cb(true);
+          cb("error");
 
           return this;
         });
+
         mockLogger = sinon.mock(logger);
         mockApp = appFactory(mockdb, mockLogger);
         done();
@@ -369,8 +370,8 @@ describe("api tests", function() {
       let app;
       let mockLogger;
       beforeEach(done => {
-        sinon.stub(mockdb, "all").callsFake((a, cb) => {
-          cb(true);
+        sinon.stub(mockdb, "all").callsFake((a, b, cb) => {
+          cb("error");
         });
         mockLogger = sinon.mock(logger);
         app = appFactory(mockdb, mockLogger);
@@ -537,8 +538,8 @@ describe("api tests", function() {
       let app;
       let mockLogger;
       beforeEach(done => {
-        sinon.stub(mockdb, "all").callsFake((a, cb) => {
-          cb(true);
+        sinon.stub(mockdb, "all").callsFake((a, b, cb) => {
+          cb("error");
         });
         mockLogger = sinon.mock(logger);
         app = appFactory(mockdb, mockLogger);
@@ -566,8 +567,8 @@ describe("api tests", function() {
       let app;
       let mockLogger;
       beforeEach(done => {
-        sinon.stub(mockdb, "all").callsFake((a, cb) => {
-          cb(false, []);
+        sinon.stub(mockdb, "all").callsFake((a, b, cb) => {
+          cb(undefined, []);
         });
         mockLogger = sinon.mock(logger);
         app = appFactory(mockdb, mockLogger);
@@ -595,7 +596,7 @@ describe("api tests", function() {
       let app;
 
       beforeEach(done => {
-        sinon.stub(mockdb, "all").callsFake((a, cb) => {
+        sinon.stub(mockdb, "all").callsFake((a, b, cb) => {
           cb(
             false,
             JSON.parse(`
