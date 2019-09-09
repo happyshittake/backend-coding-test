@@ -60,10 +60,10 @@ module.exports = body => {
   }
 
   return {
-    startLatitude,
-    startLongitude,
-    endLatitude,
-    endLongitude,
+    startLat: startLatitude,
+    startLong: startLongitude,
+    endLat: endLatitude,
+    endLong: endLongitude,
     driverName,
     riderName,
     driverVehicle

@@ -149,7 +149,7 @@ describe("validation tests", () => {
 
     describe("if all fields are ok", () => {
       it("should return validated object", () => {
-        assert(
+        assert.deepEqual(
           validation.createRide({
             start_lat: "1.2",
             start_long: "2.3",

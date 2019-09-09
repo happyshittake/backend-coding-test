@@ -52,30 +52,18 @@ module.exports = (db, logger) => {
     }
   });
 
-  app.get("/rides/:id", (req, res) => {
-    db.all(`SELECT * FROM Rides WHERE rideID='${req.params.id}'`, function(
-      err,
-      rows
-    ) {
-      if (err) {
-        logger.error(err);
-        return res.send({
-          error_code: "SERVER_ERROR",
-          message: "Unknown error"
-        });
+  app.get("/rides/:id", async (req, res) => {
+    try {
+      const rides = await repo.getRideByID(db, Number(req.params.id));
+      if (rides.length === 0) {
+        throw new error.ErrRidesNotFound("Could not find any rides");
       }
 
-      if (rows.length === 0) {
-        const errObject = {
-          error_code: "RIDES_NOT_FOUND_ERROR",
-          message: "Could not find any rides"
-        };
-        logger.error(errObject);
-        return res.send(errObject);
-      }
-
-      res.send(rows);
-    });
+      res.send(rides);
+    } catch (e) {
+      logger.error(e);
+      res.send(e.jsonFormat);
+    }
   });
 
   return app;
